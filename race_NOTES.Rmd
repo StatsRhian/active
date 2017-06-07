@@ -1,0 +1,31 @@
+---
+title: "Race Result Analysis Notes"
+output: html_document
+---
+# Importing Data
+
+This is the big challenge here. There are ways to do it manually but I want to use it as a chance to learn new skills. I currently have the results I want to analyse but many are in pdfs. I see the following broad methods for doing this:
+
+1. Import directly from PDFs. 
+2. Scrape results as csvs from fellrunner website.
+3. Manually download csvs but automate processing.
+
+The difficulty in 1 seems to be processing the text since it isn't in a structured form like in a csv. I would like to learn about this but it may never be efficient because pdf results come in different forms. I'd like to try 2 for learning but I think 3 will be simplest since I would like to get this done soon.
+
+I don't know if all results are on fellrunner. I have done 60 races to date (07 June 17) of which 35 are fell runs. The best thing would be to put all of these in one folder with suitable names. Could I write code to check which exist? I would have to enter the names and dates manually. I think fellrunner initially puts up pdfs but then writes writes it up later as a csv.
+
+I will download every race that is available in csv to a folder called "Results_csv". File names will be in the form "nameyear" where "name" is upper camel case e.g. ThreeShires2016. This will be easy to break up later and use as I like.
+
+Result csvs from fellrunner have four columns: name, club, category, time.
+
+Not available as csv: all KWL, Clougha 2014, Hutton Roof 2015, Relays (Lee mills, FRA, Hodgson), Weasdale 2016, Great Whernside 2016, Arnside 2016, and 2017 (Three shires, Latrigg)
+
+CSVs but not from fellrunner: Warton 2016
+
+I deleted some columns from Warton before importing but it will also need a little processing later within R.
+
+## PDF to table
+
+## Web Scraping in R
+
+The main package to do this appears to be [rvest](https://cran.r-project.org/web/packages/rvest/index.html) which is a Hadley package. Example tutorials are [here](https://rpubs.com/Radcliffe/superbowl), [here](https://blog.rstudio.org/2014/11/24/rvest-easy-web-scraping-with-r/) and a [longer one](https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/)
