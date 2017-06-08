@@ -18,7 +18,7 @@ I will download every race that is available in csv to a folder called "Results_
 
 Result csvs from fellrunner have four columns: name, club, category, time.
 
-Not available as csv: all KWL, Clougha 2014, Hutton Roof 2015, Relays (Lee mills, FRA, Hodgson), Weasdale 2016, Great Whernside 2016, Arnside 2016, and 2017 (Three shires, Latrigg)
+Not available as csv: all KWL, Clougha 2014, Hutton Roof 2015, Relays (Lee mills, FRA, Hodgson), Weasdale 2016, Great Whernside 2016, Arnside 2016, and 2017 (Coledale, Latrigg)
 
 CSVs but not from fellrunner: Warton 2016
 
@@ -26,6 +26,24 @@ I deleted some columns from Warton before importing but it will also need a litt
 
 ## PDF to table
 
+There are a number of packages for reading from PDFs. I've looked at `pdftools`, `pdftables`, `tm` and `tabulizer`. There are two levels to what I want to do. the basic approach is to get text from the pdf which can be done by `pdftools` and I think `tm`. ideally I want something that can recognise tables and grab those in a table form. The other two packages seem to do this but there are complications in each case.
+
+The package [pdftables](https://github.com/expersso/pdftables) just automates access to [PDFTables](https://pdftables.com/) which is a website that converts PDFs to Excel. There are a limited number of pages for free. Seemed to work ok with the Arnside results.
+
+[tabulizer](https://github.com/ropensci/tabulizer) uses a Java library for extracting tables from PDFs but I couldn't get it to install.
+
+[tm](http://data.library.virginia.edu/reading-pdf-files-into-r-for-text-mining/) is a package for scanning and processing text. Reading the article I'm not sure it does anything more than pdftools which seems simpler to use.
+
+[pdftools](https://www.r-bloggers.com/introducing-pdftools-a-fast-and-portable-pdf-extractor/) is fairly simple. *The most important function is pdf_text which returns a character vector of length equal to the number of pages in the pdf. Each string in the vector contains a plain text version of the text on that page* - `txt <- pdf_text("name.pdf")`. The text can be viewed easily using `cat(txt)` which looks like a table but I have to do more to actually get it into a table.
+
 ## Web Scraping in R
 
 The main package to do this appears to be [rvest](https://cran.r-project.org/web/packages/rvest/index.html) which is a Hadley package. Example tutorials are [here](https://rpubs.com/Radcliffe/superbowl), [here](https://blog.rstudio.org/2014/11/24/rvest-easy-web-scraping-with-r/) and a [longer one](https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/)
+
+## Text to CSV
+
+Starting with the text as extracted using pdftools
+
+Reading PDFs seems to work well but the output is just in the form of strings i.e. it doesn't recognise any table formatting that was in the pdf. I think the best way to deal with this is to convert the text so that it can be saved as a csv and then work with this file in future.
+
+Two useful pages on CSVs: [guide to CSVs](http://frictionlessdata.io/guides/csv/), [six rules for creating CSVs](http://www.thoughtspot.com/blog/6-rules-creating-valid-csv-files).

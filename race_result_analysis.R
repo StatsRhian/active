@@ -1,10 +1,25 @@
 
-if(file.exists("C:/Users/edwards/Dropbox/Mine/Personal/Running/Races&events/Arnside knott/AK2013seniorresults.pdf")){
-  file_name <- "C:/Users/edwards/Dropbox/Mine/Personal/Running/Races&events/Arnside knott/AK2013seniorresults.pdf" #new laptop
+if(file.exists("C:/Users/edwards/Dropbox/Mine/Personal/Running/Races&events/Results_PDF/ArnsideKnott2016.pdf")){
+  file_name <- "C:/Users/edwards/Dropbox/Mine/Personal/Running/Races&events/Results_PDF/ArnsideKnott2016.pdf" #new laptop
 }else{
-  file_name <- "E:/Dropbox/Mine/Personal/Running/Races&events/Arnside knott/AK2013seniorresults.pdf" #old laptop
+  file_name <- "E:/Dropbox/Mine/Personal/Running/Races&events/Results_PDF/ArnsideKnott2016.pdf" #old laptop
 }
+#tabulizer
+#See https://github.com/ropensci/tabulizer
+# Installation didn't work.
+if (!require("ghit")) {
+  install.packages("ghit")
+}
+# on 64-bit Windows
+ghit::install_github(c("ropensci/tabulizerjars", "ropensci/tabulizer"), INSTALL_opts = "--no-multiarch")
 
+#tm 
+install.packages("tm") # only need to do once
+library(tm)
+
+#pdftables
+library(pdftables)
+convert_pdf(file_name, "test.csv")
 #From pdf
 install.packages("pdftools")
 library(pdftools)
@@ -18,6 +33,9 @@ lines[[1]][1]
 head(lines[[1]])
 cat(txt) #prints as a table by usingthe carriage returns /r in the text
 
+examp <- lines[[1]][4]
+words1 <- strsplit(examp, " ")
+length(words1)
 
 #some experimental processing
 lines[[1]] <- lines[[1]][-1]
