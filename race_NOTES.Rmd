@@ -16,13 +16,11 @@ I don't know if all results are on fellrunner. I have done 60 races to date (07 
 
 I will download every race that is available in csv to a folder called "Results_csv". File names will be in the form "nameyear" where "name" is upper camel case e.g. ThreeShires2016. This will be easy to break up later and use as I like.
 
-Result csvs from fellrunner have four columns: name, club, category, time.
+Result csvs from fellrunner have four columns: name, club, category, time. Retired runners have "RET" in time column. The CSVs have \r\n characters to separate lines. There is a blank final line but this is ignored in the `read_csv`. "Category" entries are not all consistent across different races. Time should be in "hh:mm:ss" format (as a string).
 
 Not available as csv: all KWL, Clougha 2014, Hutton Roof 2015, Relays (Lee mills, FRA, Hodgson), Weasdale 2016, Great Whernside 2016, Arnside 2016, and 2017 (Coledale, Latrigg)
 
-CSVs but not from fellrunner: Warton 2016
-
-I deleted some columns from Warton before importing but it will also need a little processing later within R.
+CSVs but not from fellrunner: Warton 2016. I deleted some columns from Warton before importing but it will also need a little processing later within R. ColedaleHS2016 will also need some processing.
 
 ## PDF to table
 
@@ -36,10 +34,6 @@ The package [pdftables](https://github.com/expersso/pdftables) just automates ac
 
 [pdftools](https://www.r-bloggers.com/introducing-pdftools-a-fast-and-portable-pdf-extractor/) is fairly simple. *The most important function is pdf_text which returns a character vector of length equal to the number of pages in the pdf. Each string in the vector contains a plain text version of the text on that page* - `txt <- pdf_text("name.pdf")`. The text can be viewed easily using `cat(txt)` which looks like a table but I have to do more to actually get it into a table.
 
-## Web Scraping in R
-
-The main package to do this appears to be [rvest](https://cran.r-project.org/web/packages/rvest/index.html) which is a Hadley package. Example tutorials are [here](https://rpubs.com/Radcliffe/superbowl), [here](https://blog.rstudio.org/2014/11/24/rvest-easy-web-scraping-with-r/) and a [longer one](https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/)
-
 ## Text to CSV
 
 Starting with the text as extracted using pdftools
@@ -47,3 +41,15 @@ Starting with the text as extracted using pdftools
 Reading PDFs seems to work well but the output is just in the form of strings i.e. it doesn't recognise any table formatting that was in the pdf. I think the best way to deal with this is to convert the text so that it can be saved as a csv and then work with this file in future.
 
 Two useful pages on CSVs: [guide to CSVs](http://frictionlessdata.io/guides/csv/), [six rules for creating CSVs](http://www.thoughtspot.com/blog/6-rules-creating-valid-csv-files).
+
+There's nothing too complicated with creating a CSV. It's just a long string with rows separated by a newline/carriage return/line feed operator (which wasn't straightforward) and entries within each row separated by a comma. The FRA csvs had `\n\r` at the end of each line. I found that `cat` automatically adds an `\r` to each newline when saving so using `sep='\n'` results in the desired `\r\n`.
+
+## Processing the Race Results
+
+The code for this is in `race_to_csv.R` using functions in `race_FUNC.R`.
+
+The challenge in creating the CSVs was in text processing after it was read from the PDF files. The main problem was that the tables in the PDFs were in different forms with some entries missing. It was easy to see what these missing entries should be (MSEN for age category or UA for club) but it was not easy to fix like it would be in a table. It made processing difficult because my processing method relied on splitting each line into "words".
+
+## Web Scraping in R
+
+The main package to do this appears to be [rvest](https://cran.r-project.org/web/packages/rvest/index.html) which is a Hadley package. Example tutorials are [here](https://rpubs.com/Radcliffe/superbowl), [here](https://blog.rstudio.org/2014/11/24/rvest-easy-web-scraping-with-r/) and a [longer one](https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/)
