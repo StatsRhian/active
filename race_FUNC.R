@@ -54,4 +54,9 @@ check_category <- function(category){
   return((has_digit & has_letter) | category=="L")
 }
 
+replace_char <- function(txt, string, start){
+  keep1 <- str_sub(txt, start=1, end=(start - 1))
+  keep2 <- str_sub(txt, start=(start + str_length(string)), end=-1)
+  return(str_c(c(keep1, string, keep2) , collapse=""))
+}
 

@@ -28,7 +28,7 @@ files_raw
 
 files_root <- str_sub(files_raw, 1, -5) #remove ".pdf" etc.
 choose <- 1
-file_name <- str_c(path_root, "Results_raw/", files[choose])
+file_name <- str_c(path_root, "Results_raw/", files_raw[choose])
 # Read pdf
 txt <- pdf_text(file_name)
 #cat(txt)
