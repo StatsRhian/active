@@ -1,16 +1,29 @@
 
-convert_entry <- function(entry, name_loc, cat_loc, club_start, club_end=0, cat_missing=F){
-  words <- str_split(entry, boundary("word")) %>% unlist
-  if(words[1]=="WD"){words <- c("RET", words)} #for arnside ret runner
-  n <- length(words)
-  club_end <- n - club_end
-  name <- str_c(words[name_loc], collapse=" ")
-#  if(time_loc < 0){time_loc <- length(words) + 1 + time_loc}
+################
+# Takes a string race entry, processes it and outputs a character vector matching the FRA
+# format of: name, club, category, time.
+################
+convert_entry <- function(entry, name_loc, cat_loc, club_start, after_club=0, cat_missing=F){
   time <- extract_time(entry)
-  club <- str_c(words[club_start : club_end], collapse=" ")
-  if (str_detect(club, "\\d")){club <- "UA"} #club missing if it contains a digit
-  categ <- words[cat_loc]
-  if (cat_missing & !check_category(categ)){categ <- "M"}
+  # Various cleaning of initial text
+  entry <- entry %>% str_replace_all(":", ".") %>% #so that the time is treated as single "word"
+    str_replace_all("\\&", " and ") %>%
+    str_replace_all("/", "") %>%
+    str_replace_all("L OPEN", "L") %>%
+    str_replace_all("Male Under 23", "MU23") %>%
+    str_replace_all("Ladies Under 23", "LU23")
+  words <- str_split(entry, boundary("word")) %>% unlist
+  n <- length(words)
+  categ <- if(cat_loc>0){words[cat_loc]}else{words[length(words) + cat_loc + 1]}
+  this_cat_missing <- cat_missing & !check_category(categ)
+  after_club <- n - after_club + this_cat_missing
+  name <- words[name_loc] %>% str_to_title %>% str_c(collapse=" ")
+  club <- str_c(words[club_start : after_club], collapse=" ")
+  if (str_detect(club, "\\d")){club <- "Missing"} #club missing if it contains a digit
+  # Inserts "None" as category if missing
+  if (cat_missing & !check_category(categ)){
+    categ <- "None"
+  }
   return(c(name, club, categ, time))
 }
 
@@ -54,9 +67,29 @@ check_category <- function(category){
   return((has_digit & has_letter) | category=="L")
 }
 
+################
+# Inputs: two strings ("txt" and "string") and an integer "start".
+# Outputs txt with the characters starting at "start" replaced by "string".
+# The length of "txt" is unchanged.
+################
 replace_char <- function(txt, string, start){
   keep1 <- str_sub(txt, start=1, end=(start - 1))
   keep2 <- str_sub(txt, start=(start + str_length(string)), end=-1)
   return(str_c(c(keep1, string, keep2) , collapse=""))
 }
 
+##############
+# Returns TRUE if "string" begins with a digit.
+##############
+is_numeric_first <- function(string){
+  words <- str_split(string, boundary("word")) %>% unlist
+  if (is.na(str_detect(words, "^\\d")[1])){return(FALSE)}
+  return(str_detect(words, "^\\d")[1])
+}
+
+##############
+# Returns TRUE if "string" ends with ".pdf". 
+##############
+is_pdf <- function(string){
+  return(str_sub(string, -4, -1) %>% identical(".pdf"))
+}
