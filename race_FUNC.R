@@ -3,7 +3,8 @@
 # Takes a string race entry, processes it and outputs a character vector matching the FRA
 # format of: name, club, category, time.
 ################
-convert_entry <- function(entry, name_loc, cat_loc, club_start, after_club=0, cat_missing=F){
+convert_entry <- function(entry, name_loc, cat_loc, club_start, 
+                          after_club=0, cat_missing=F, kwl=F){
   time <- extract_time(entry)
   # Various cleaning of initial text
   entry <- entry %>% str_replace_all(":", ".") %>% #so that the time is treated as single "word"
@@ -11,15 +12,26 @@ convert_entry <- function(entry, name_loc, cat_loc, club_start, after_club=0, ca
     str_replace_all("/", "") %>%
     str_replace_all("L OPEN", "L") %>%
     str_replace_all("Male Under 23", "MU23") %>%
-    str_replace_all("Ladies Under 23", "LU23")
+    str_replace_all("Ladies Under 23", "LU23") %>%
+    str_replace_all(" \\?", "Unknown") %>% #gigg2017 has ?????? in place of a name
+    str_replace_all("-", "_") #handle hypehnated names
   words <- str_split(entry, boundary("word")) %>% unlist
   n <- length(words)
   categ <- if(cat_loc>0){words[cat_loc]}else{words[length(words) + cat_loc + 1]}
   this_cat_missing <- cat_missing & !check_category(categ)
   after_club <- n - after_club + this_cat_missing
-  name <- words[name_loc] %>% str_to_title %>% str_c(collapse=" ")
+  name <- words[name_loc]  %>% str_replace_all("_", "-") %>%
+    str_to_title %>% str_c(collapse=" ") %>% apostrophe_name_title
   club <- str_c(words[club_start : after_club], collapse=" ")
-  if (str_detect(club, "\\d")){club <- "Missing"} #club missing if it contains a digit
+  if (is.na(club)){club <- "Unattached"}
+  if (str_detect(club, "\\d")){
+    if (kwl){
+      loc <- str_locate(club, "\\d")
+      club <- str_sub(club, 1, loc[1, 1] - 2)
+    }else{
+      club <- "Missing" #club missing if it contains a digit
+    } 
+  }
   # Inserts "None" as category if missing
   if (cat_missing & !check_category(categ)){
     categ <- "None"
@@ -92,4 +104,12 @@ is_numeric_first <- function(string){
 ##############
 is_pdf <- function(string){
   return(str_sub(string, -4, -1) %>% identical(".pdf"))
+}
+
+##############
+#Capatilises the letter after ' in a string.
+##############
+apostrophe_name_title <- function(name){
+  if (!str_detect(name, "'")){return(name)}
+  return(name %>% str_split("'") %>% unlist %>% str_to_title %>% str_c(collapse="'"))
 }
