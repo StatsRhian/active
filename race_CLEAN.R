@@ -87,7 +87,9 @@ res
 res_new <- res %>% mutate(name=str_c(Forename, " ", Surname)) %>%
   select(name, club=Club, cat=`Vet Category`, time=Time) %>%
   rowwise %>%
-  mutate(time=correct_time_format(time)) 
+  mutate(time=correct_time_format(time)) %>%
+  # mutate(category=cat) %>%
+  select(name, club, category=cat, time)
 
 file_name <- str_c(path_root, "Results_csv/WartonCrag2016.csv")
 write.csv(res_new, file=file_name, row.names=F)
