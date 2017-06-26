@@ -1,0 +1,49 @@
+---
+title: "Race Results Changelog"
+author: "James Edwards"
+date: "26 June 2017"
+output: html_document
+---
+---
+title: "Change Log"
+output: html_document
+---
+
+All notable changes to this project will be documented in this file. See `race_NOTES.Rmd` for more detail.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/)
+and this project adheres to [Semantic Versioning](http://semver.org/).
+
+Each change can be labelled as added, changed or fixed.
+
+## To do
+
+* Split up `active R project` into race, activity analysis & OCT.
+* Make code available to Rhian (totally public)?
+* Standardise category variables.
+* Some categories are unknown or mislabled.
+* Separate README for race project.
+* Standardise club names.
+* Unit tests?
+
+## Issues
+
+* There are some three word names e.g. Chris De Silva.
+* NAs in category and club (check each column).
+
+## Unreleased
+
+### Added
+I was slow making a changelog. As of 26/06/17 contains files for:
+
+* `race_FUNC.R` contains any functions I have written for processing the data.
+* Creating csvs of race results in correct format: `race_CLEAN.R` for reformatting some existing csvs; `race_to_csv_ALL.R` calls `race_to_csv_DO.R` which reads from race pdfs (and one text file), processes then saves as csvs. Uses settings stored in `to_csv_settings.csv`.
+* `race_LOAD.R` loads from all the csvs, combines them into a data frame and does further cleaning and processing.
+* `race_ANALYSE.R` used to extract anything of interest from the processed data.
+* `race_NOTES.Rmd` - some notes I made as I went along. Will be best rewritten.
+
+### Changed
+
+
+
+
