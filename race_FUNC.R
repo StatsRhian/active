@@ -113,3 +113,14 @@ apostrophe_name_title <- function(name){
   if (!str_detect(name, "'")){return(name)}
   return(name %>% str_split("'") %>% unlist %>% str_to_title %>% str_c(collapse="'"))
 }
+
+##############
+#Converts string in format "HH:MM:SS" to a numeric equal to the number of seconds.
+##############
+string_to_time <- function(time_string){
+  h <- as.numeric(str_sub(time_string, 1, 2))
+  m <- as.numeric(str_sub(time_string, 4, 5))
+  s <- as.numeric(str_sub(time_string, 7, 8))
+#  return(duration(hour=h, mins=m, second=s))
+  return(3600 * h + 60 * m + s)
+}
