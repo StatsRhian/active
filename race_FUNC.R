@@ -14,13 +14,17 @@ convert_entry <- function(entry, name_loc, cat_loc, club_start,
     str_replace_all("Male Under 23", "MU23") %>%
     str_replace_all("Ladies Under 23", "LU23") %>%
     str_replace_all(" \\?", "Unknown") %>% #gigg2017 has ?????? in place of a name
-    str_replace_all("-", "_") #handle hypehnated names
+    str_replace_all("-", "_") %>% #handle hypehnated names
+    str_replace_all(" De ", " De1") %>% #Arnside2016
+    str_replace_all("DE CURTIS", "De1CURTIS") %>% #Coldale2017
+    str_replace_all(" C\\?| D ", " ") %>% #Weasdale
+    str_replace_all("James L", "James") #Weasdale
   words <- str_split(entry, boundary("word")) %>% unlist
   n <- length(words)
   categ <- if(cat_loc>0){words[cat_loc]}else{words[length(words) + cat_loc + 1]}
   this_cat_missing <- cat_missing & !check_category(categ)
   after_club <- n - after_club + this_cat_missing
-  name <- words[name_loc]  %>% str_replace_all("_", "-") %>%
+  name <- words[name_loc]  %>% str_replace_all("_", "-") %>% str_replace("De1", "De ") %>%
     str_to_title %>% str_c(collapse=" ") %>% apostrophe_name_title
   club <- str_c(words[club_start : after_club], collapse=" ")
   if (is.na(club)){club <- "Unattached"}

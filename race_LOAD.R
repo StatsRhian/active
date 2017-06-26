@@ -55,24 +55,60 @@ if(F){
     group_by(club) %>% tally %>% arrange(desc(n)) %>% print(n=50) #487 unique
   data %>% select(club) %>% mutate(club=str_to_lower(club)) %>% 
     filter(str_detect(club, "runners")) %>% distinct %>% View
+  #explore categories
+  data %>% select(category) %>% distinct #123 unique
+  data %>% select(category) %>% filter(str_detect(category, "\\d")) %>% distinct %>% print(n=Inf)
+  data %>% filter(category=="Open") %>% group_by(raceID) %>% tally
+  data %>% select(category) %>% rowwise %>% 
+    mutate(category=standardise_category(category)) %>%
+             group_by(category) %>% tally %>% print(n=Inf) #36 unique
   
 }
 #################
 #
 #################
 standardise_club <- function(club){
+  if(is.na(club)){return("ua")}
   club <- str_to_lower(club)
   pattern <- " (ac|runners|club|running|fell|fr|harriers|road|rmi|rc|a\\.c|a c|f\\.r|rr)"
   club <- club %>% str_replace_all(pattern, "") %>%
     str_replace_all(" and ", " & ") %>%
     str_replace_all("-|_|- ", " ") %>%
-    str_replace_all("u/a|u\a|un attached|unattached", "ua")
+    str_replace_all("u/a|u\a|un attached|unattached", "ua") %>%
+    str_replace_all("cfr", "cumberland") %>%
   return(club)
 }
 
-standardise_club("broad road runners")
+standardise_club(NA)
 
 str_replace_all("ddd ac harriers team fell runners", " (ac|fell|harriers)" , "")
 
 str_replace_all("clayton-le-moors", "-|_|- ", " ")
 str_replace_all("u\a", "u\a", "ua")
+
+#################
+#5 race use MSEN, 4 use M, KWL& whernside use Man, 
+#################
+standardise_category <- function(categ){
+  if (is.na(categ)){return("Man")}
+  if (str_detect(categ, "\\d")){
+    age <- str_extract(categ, "\\d\\d")
+    lady <- str_detect(categ, "L|W|F")
+    under <- ifelse(age < 30, "U","V")
+    if (lady){
+      return(str_c("L", under, age))
+    }else{
+      return(str_c("M", under, age))
+    }
+  }else{
+    if (str_detect(categ, "^M|^O|SM")){categ <- "Man"}
+    if (str_detect(categ, "^F|^L|^W|SF")){categ <- "Lady"}
+  }
+  return(categ)
+}
+categ <- categ %>% str_replace_all("$M", " & ")
+standardise_category("M20")
+str_detect("M", "$M|$O")
+
+age=40
+str_c("L", if(age < 30){"U"}, age)
