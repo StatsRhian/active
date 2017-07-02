@@ -46,9 +46,11 @@ There's nothing too complicated with creating a CSV. It's just a long string wit
 
 ## Processing the Race Results
 
-The code for this is in `race_to_csv.R` using functions in `race_FUNC.R`.
+The code for this is in `race_to_csv_DO.R` using functions in `race_FUNC.R`.
 
-The challenge in creating the CSVs was in text processing after it was read from the PDF files. The main problem was that the tables in the PDFs were in different forms with some entries missing. It was easy to see what these missing entries should be (MSEN for age category or UA for club) but it was not easy to fix like it would be in a table. It made processing difficult because my processing method relied on splitting each line into "words".
+The challenge in creating the CSVs was in text processing after it was read from the PDF files. The main problem was that the tables in the PDFs were in different forms with some entries missing. It was easy to see what these missing entries should be (MSEN for age category or UA for club) but it was not easy to fix like it would be in a table. It made processing difficult because my processing method relied on splitting each line into "words". I managed it but it took time. See the files for details.
+
+A better approach might have been to treat the text as a fixed width file. This would require me to state the column widths for each file (in some cases the widths differe on different pages too). It could be robust once I have done that though.
 
 ## Web Scraping in R
 

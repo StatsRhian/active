@@ -24,7 +24,9 @@ Each change can be labelled as added, changed or fixed.
 * Some categories are unknown or mislabled.
 * Separate README for race project.
 * Standardise club names.
+* Standardise categories.
 * Unit tests?
+* McAbbb case wrong
 
 ## Issues
 
