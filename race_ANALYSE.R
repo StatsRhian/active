@@ -27,3 +27,24 @@ data %>%  group_by(category) %>% tally %>% View
 
 #Issues with triple names
 data %>% filter(str_detect(name, " [A-z] | [A-z]$| [A-z][A-z]$| [A-z][A-z] "))
+
+##########
+#Race winners
+
+data %>% group_by(raceID) %>% summarise(fastest=min(time)) %>% print(n=Inf)
+#These would work with character time I think
+winners <- data %>% group_by(raceID) %>% top_n(1, desc(seconds))
+cat_winners <- data %>% group_by(raceID, category) %>% top_n(1, desc(seconds))
+#Or using palcings
+winners <- filter(data, place==1)
+cat_winners <- filter(data, cat_place==1)
+
+#########
+#Single runner info
+runner = "James Edwards"
+Jed <- data %>% filter(name==runner) %>% print(n=Inf)
+Jed <- data %>% filter(name==runner) 
+Rhi <- data %>% filter(name=="Rhian Davies") 
+
+
+

@@ -128,3 +128,45 @@ string_to_time <- function(time_string){
 #  return(duration(hour=h, mins=m, second=s))
   return(3600 * h + 60 * m + s)
 }
+
+#################
+#Used to correct differing strings used for the same club so that a single string is used for a single club.
+#################
+standardise_club <- function(club){
+  if(is.na(club)){return("ua")}
+  club <- str_to_lower(club)
+  pattern <- " (ac|runners|club|running|fell|fr|harriers|road|rmi|rc|a\\.c|a c|f\\.r|rr)"
+  club <- club %>% str_replace_all(pattern, "") %>%
+    str_replace_all(" and ", " & ") %>%
+    str_replace_all("-|_|- ", " ") %>%
+    str_replace_all("u/a|u\a|un attached|unattached", "ua") %>%
+    str_replace_all("cfr", "cumberland") %>%
+    return(club)
+}
+
+#################
+#Converts category to a standard form. I have chosen to use:
+# Man, Lady, MVxx, LVxx, MUxx, LUxx.
+#
+#There are various options used: 5 race use MSEN, 4 use M, KWL& whernside use Man, 
+# others use OPEN, MOpen, MO, M Sen. Women similar but variations on W and F as well as L.
+#################
+standardise_category <- function(categ){
+  if (is.na(categ)){return("Man")}
+  if (str_detect(categ, "\\d")){
+    age <- str_extract(categ, "\\d\\d")
+    lady <- str_detect(categ, "L|W|F")
+    under <- ifelse(age < 30, "U","V")
+    if (lady){
+      return(str_c("L", under, age))
+    }else{
+      return(str_c("M", under, age))
+    }
+  }else{
+    if (str_detect(categ, "^M|^O|SM")){categ <- "Man"}
+    if (str_detect(categ, "^F|^L|^W|SF")){categ <- "Lady"}
+  }
+  return(categ)
+}
+
+standardise_category("Vet Men 40")
