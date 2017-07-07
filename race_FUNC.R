@@ -153,7 +153,7 @@ standardise_club <- function(club){
 #################
 standardise_category <- function(categ){
   if (is.na(categ)){return("Man")}
-  if (str_detect(categ, "\\d")){
+  if (str_detect(categ, "\\d\\d")){
     age <- str_extract(categ, "\\d\\d")
     lady <- str_detect(categ, "L|W|F")
     under <- ifelse(age < 30, "U","V")
@@ -168,5 +168,3 @@ standardise_category <- function(categ){
   }
   return(categ)
 }
-
-standardise_category("Vet Men 40")

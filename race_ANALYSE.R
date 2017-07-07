@@ -1,5 +1,4 @@
 
-source("race_FUNC.R")
 source("race_LOAD.R")
 
 ret %>% group_by(time) %>% tally

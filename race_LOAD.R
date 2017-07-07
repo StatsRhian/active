@@ -7,6 +7,7 @@
 library(tidyverse)
 library(lubridate)
 library(stringr)
+source("race_FUNC.R")
 
 if(dir.exists("C:/Users/edwards/Dropbox/Mine/Personal/Running/Races&events/Results_CSV/")){
   path_root <- "C:/Users/edwards/Dropbox/Mine/Personal/Running/Races&events/Results_CSV/" #new laptop
@@ -72,7 +73,9 @@ data <- data %>% group_by(raceID, category) %>% mutate(cat_place=min_rank(second
 data <- data %>% group_by(raceID) %>% mutate(perc_winner=seconds / min(seconds))
 #Add % of cat winner's time
 data <- data %>% group_by(raceID, category) %>% mutate(perc_cat_winner=seconds / min(seconds))
-#Add gender
-#Add year of race
-data <- data %>% mutate(year = str_sub(raceID, -4, -1)) 
-data %>% ungroup %>% arrange(year, raceID, place)
+#Add year of race and gender and sort
+data <- data %>% mutate(year = str_sub(raceID, -4, -1)) %>%
+  mutate(gender = str_sub(category, 1, 1)) %>% 
+  mutate (gender = ifelse(str_detect(gender, "M|L"), gender, "Unknown")) %>%
+  ungroup %>% arrange(year, raceID, place)
+
