@@ -27,6 +27,7 @@ Each change can be labelled as added, changed or fixed.
 * Standardise categories.
 * Unit tests?
 * McAbbb case wrong
+* Add race info data (date, class,...?)
 
 ## Issues
 

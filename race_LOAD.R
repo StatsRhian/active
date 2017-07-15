@@ -36,7 +36,7 @@ data <- bind_rows(results)
 ret <- data %>% filter(!str_detect(time, "\\d"))
 data <- data %>% filter(str_detect(time, "\\d"))  #could convert "time" to a time with "%>% type_convert"
 # Add numerical time column (in seconds) and correct name case
-data <- data %>% rowwise %>% mutate(seconds=string_to_time(time)) %>%
+data <- data %>% rowwise %>% mutate(seconds=as.integer(string_to_time(time))) %>%
   mutate(name=str_to_title(name)) %>% rowwise %>% mutate(name=apostrophe_name_title(name))
 
 #data <- na_replace(data, replace=list(club=unknown))
@@ -47,7 +47,7 @@ data <- data %>% rowwise %>% mutate(seconds=string_to_time(time)) %>%
 # Club and category processing exploration).
 ############
 if(F){
-  data %>% group_by(club) %>% tally %>% arrange(desc(n)) %>% print(n=20) #696 unique
+  data %>% group_by(club) %>% tally %>% arrange(desc(n)) %>% print(n=20) #691 unique
   unique_clubs <- data %>% select(club) %>% distinct %>% unlist
   data %>% rowwise %>% mutate(club=standardise_club(club)) %>%
     group_by(club) %>% tally %>% arrange(desc(n)) %>% print(n=50) #487 unique
