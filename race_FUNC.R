@@ -168,3 +168,44 @@ standardise_category <- function(categ){
   }
   return(categ)
 }
+
+#############
+#Inputs: names of two runners.
+#Returns a data frame with one row for each race both runners did and a comparison of times.
+#############
+compare_runners <- function(data, run1, run2) {
+  two <- data %>% filter(name %in% c(run2)) %>% select(raceID, time2=time, seconds2=seconds, place2=place)
+  compare <- data %>% filter(name==run1) %>% 
+    select(raceID, year, time1=time, seconds1=seconds, place1=place) %>% 
+    inner_join(two, by="raceID") %>% 
+    mutate(diff_place=place2 - place1) %>%
+    mutate(gap=seconds2 - seconds1) %>%
+    mutate(multiple=seconds2 / seconds1)
+  return(compare)
+}
+
+############
+# Input a runner's name and a range (vector of length two).
+# Returns a dataframe of results where the time multiple compared to the time of the "runner"
+# was within the supplied range.
+############
+rivals <- function(data, runner, range) {
+  low <- range[1]
+  high <- range[2]
+  by_race <- data %>% group_by(raceID) %>% nest()
+  return(by_race %>% mutate(my_time=unlist(map(data, runner_time, runner))) %>% 
+           filter(!is.na(my_time)) %>% unnest(data) %>%
+           mutate(multiple=seconds / my_time) %>%
+           filter((multiple >= low) & (multiple <= high)) %>%
+           filter(name!=runner))
+}
+
+#################
+# A helper function for rivals(). Returns a vector of times (seconds) for the runner
+# named in the argument.
+#################
+runner_time <- function(data, runner){
+  ran <- any(data$name==runner)
+  if (!ran){return(NA)}
+  return(filter(data, name==runner)["seconds"])
+}
