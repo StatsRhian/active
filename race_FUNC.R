@@ -140,7 +140,7 @@ standardise_club <- function(club){
     str_replace_all(" and ", " & ") %>%
     str_replace_all("-|_|- ", " ") %>%
     str_replace_all("u/a|u\a|un attached|unattached", "ua") %>%
-    str_replace_all("cfr", "cumberland") %>%
+    str_replace_all("cfr", "cumberland")
     return(club)
 }
 
