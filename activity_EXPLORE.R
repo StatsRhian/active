@@ -24,16 +24,7 @@ log %>% filter(Type %in% c("R", "B", "F")) %>%
   top_n(n=5, wt=Distance) %>%
   arrange(Type, desc(Distance))
 
-#TO DO
-#Replicate excel sheets with functions:
-#Shoes
-#Longest rides/runs - fucntion similar to above but with options
-#Number rides/runs over given lenght etc.
-#...?
-#Rolling sum - I think create a new df for each #days I want in the rolling sum with all
-# the cols I need i.e. date & time/dist/ascent for each of BFR & foot combined & time combined.
-#...or date, type, time, dist, ascent cols with type R,B,F,RF,RFB then filter when needed.
-#Maybe make own function - use cumsum then lag? Use dplyr?
+
 library(zoo)
 temp <- totals %>% filter(Type=="R") %>% transmute(temp=rollsum(Distance, 28, alig="right", fill=NA))
 plot(temp$temp, typ='l')

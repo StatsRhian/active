@@ -9,8 +9,8 @@ get_week_gaps <- function(log, max_week=7){
 }
 
 ################
-#Splits all week summary data in a activity log over the 
-# time follwing the summary until the next summary or "max_week", whichever comes first.
+#S plits all week summary data in a activity log over the 
+# time following the summary until the next summary or "max_week", whichever comes first.
 # The function splits numeric values in columns 5,6,7,9, replicates columns 1,3,4 and 
 # increments the date in column 2.
 # New week data is recombined with non-week data and sorted by date.
@@ -21,11 +21,11 @@ split_week_data <- function(log, max_week=7){
   gaps <- get_week_gaps(log, max_week)
   nn <- dim(log)[1]
   locs <- c(1, cumsum(gaps) + 1)
-  week_df <- log[1:sum(gaps), c(1:7, 9)] #create empty df of correct dimensions
+  week_df <- log[1 : sum(gaps), c(1:7, 9)] #create empty df of correct dimensions
   for (i in 1 : nn){
     for (j in 1 : gaps[i]){
       week_df[locs[i] + j - 1, ] <- 
-        c(1, log[i, 2] + j - 1, log[i, 3:4], log[i, c(5:7,9)] / gaps[i])
+        c(1, log[i, 2] + j - 1, log[i, 3:4], log[i, c(5:7, 9)] / gaps[i])
     }
   }
   return(bind_rows(log_non_week, week_df) %>% arrange(Date) %>% rename(Week_data=Week_total))
