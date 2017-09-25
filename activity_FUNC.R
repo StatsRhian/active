@@ -33,6 +33,7 @@ split_week_data <- function(log, max_week=7){
 
 ###################
 #Replaces all NAs with zeros.
+# Not used now.
 ###################
 na_to_zero <- function (x) {
   x[is.na(x)] <- 0
