@@ -1,0 +1,25 @@
+---
+title: "Activity Record Analysis Notes"
+output: html_document
+---
+# Overview
+
+The purpose of this project is to load and do analyses on my activity record data which is recorded in a spreadsheet "Activity Record.xlsx". 
+
+# Data Import and Processing
+
+This is done in `activity_PROCESS.R`. The main activity data is recorded in the "log" sheet of the spreadsheet and this is all that is imported.
+
+The processing:
+
+1. Removes blank rows and one blank column.
+2. Renames columns.
+3. Replaces NAs (from blank entries), with zeros mostly and "none" in Sub-type and Notes.
+4. Splits "week total" data across the week (or across Mon-Fri for cycling). A "week_data" column indicates which entries came from week totals.
+5. Creates new dfs:
+    + log_master - the original import.
+    + log - the original with some cleaning. 
+    + log_B, log_R, log_F - the data for types B,F,R with appropriate variables.
+    + log_B_split, log_F_split - B and F data with week data split up over following week.
+    + log_new - R combined with B and F splits. 9 variables so some running specific ones lost.
+    + totals - Daily totals for each of R,B,F (Time, Distance, Ascent). Entries for every day.

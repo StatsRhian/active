@@ -1,0 +1,46 @@
+---
+title: "Race Results Changelog"
+author: "James Edwards"
+date: "26 June 2017"
+output: html_document
+---
+---
+title: "Change Log"
+output: html_document
+---
+
+All notable changes to this project will be documented in this file. See `activity_NOTES.Rmd` for more detail.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/)
+and this project adheres to [Semantic Versioning](http://semver.org/).
+
+Each change can be labelled as added, changed or fixed.
+
+## To do
+
+* Replicate excel sheets with functions:
+    + Shoes
+    + Longest rides/runs - fucntion similar to above but with options
+    + Number rides/runs over given length etc.
+    + ...?
+* Rolling sum - I think create a new df for each * days I want in the rolling sum with all the cols I need i.e. date & time/dist/ascent for each of BFR & foot combined & time combined. ...or date, type, time, dist, ascent cols with type R,B,F,RF,RFB then filter when needed. Maybe make own function - use cumsum then lag? Use dplyr?
+
+## Issues
+
+* Minor - NAs created in Notes column by split_week_data function.
+
+## Unreleased
+
+### Added
+I was slow making a changelog. As of 24/09/17 contains files for:
+
+* `activity_FUNC.R` contains any functions I have written for processing the data.
+* `race_PROCESS.R` loads data from the spreadsheet, cleans and processes. 
+* `activity_EXPLORE.R` used to play and explore with the processed data.
+* `activity_NOTES.Rmd` - notes on the code and data exploration.
+
+### Changed
+
+
+
+
