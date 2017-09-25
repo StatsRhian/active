@@ -19,7 +19,7 @@ source("activity_FUNC.R")
 #readxl has two functions
 excel_sheets(file_name)
 log_master <- read_excel(file_name, sheet="Log", skip=12)
-glimpse(log_master)
+#glimpse(log_master)
 count(log_master, is.na(Type))
 #trim rows with no entry and remove blank column
 log <- filter(log_master, !is.na(Type)) %>%
@@ -31,7 +31,7 @@ colnames(log) <- c("Week_total", "Date", "Type", "Sub-type", "Time", "Distance",
                    "Tempo_pace", "5k10k_pace", "Sub_5k_pace", "Hill_sprints", "Strides", "Drills", 
                    "Total_time", "Year", "Month", "Week")
 
-glimpse(log)
+#glimpse(log)
 log <- mutate(log, Date=as.Date(Date)) #change Date to date object (from datetime)
 
 # List number of NAs and replace
@@ -39,7 +39,7 @@ log %>% summarise_all(funs(sum(is.na(.)))) %>% unlist
 log <- log %>% mutate_at(vars(c(1, 5:7, 9:15)), funs(ifelse(is.na(.), 0, .))) %>%
   mutate(Week_total=ifelse(Week_total=="week", 1, 0)) %>% # Convert week total to binary
   mutate(Total_time=ifelse(is.na(Total_time), Time, Total_time)) %>%
-  mutate_all(funs(ifelse(is.na(.), "none", .))) # For Sub-type and notes
+  mutate_at(vars(3:19), funs(ifelse(is.na(.), "none", .))) # For Sub-type and notes
 
 #explore
 #table(log$Type)
@@ -61,10 +61,10 @@ log_F <- log %>% filter(Type=="F") %>%
 #Note 5 day week for cycling
 # NAs created in Notes column by split_week_data function
 log_B_split <- split_week_data(log_B, max_week=5) %>%
-  mutate_all(funs(ifelse(is.na(.), "none", .)))
+  mutate_at(vars(Notes), funs(ifelse(is.na(.), "none", .)))
 log_F_split <- log_F %>% select(-Terrain) %>%
   split_week_data(max_week=7) %>%
-  mutate_all(funs(ifelse(is.na(.), "none", .)))
+  mutate_at(vars(Notes), funs(ifelse(is.na(.), "none", .)))
 
 #Checks
 if (F){

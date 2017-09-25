@@ -1,5 +1,5 @@
 
-source("activity_record_process.R")
+source("activity_process.R")
 #log_master - the original data import
 #log - the original data with blank rows removed and some other cleaning
 #log_B, log_R, log_F - the data for types B,F,R with appropriate variables
@@ -17,6 +17,7 @@ shoe_summary <- log_R %>% group_by(`Sub-type`) %>%
   arrange(desc(Distance))
 shoe_summary
 
+# Five longest (distance) R, B and F activities.
 log %>% filter(Type %in% c("R", "B", "F")) %>%
   filter(Week_total==0) %>%
   group_by(Type) %>%
