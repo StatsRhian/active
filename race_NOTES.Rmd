@@ -2,7 +2,25 @@
 title: "Race Result Analysis Notes"
 output: html_document
 ---
-# Importing Data
+# Overview
+
+A lot of the work involved in this project has been in importing the race result data since a formats and language used are inconsistent. I have converted all my race results to .csv files in standard FRA format, done some cleaning and saved the csvs to a new fowith existing races. Importing from the csvs is straightforward. 
+
+A summary of the full import process is:
+
+* `race_CLEAN.R` processes 3 race results, 1 text file and 2 csvs so that they are in an appropriate format.
+* `race_to_csv_ALL.R` processes .pdf and .txt file results and saves them in the correct .csv format. This calls `race+to_csv_DO.R` and requires settings in `to_csv_settings.csv` which controls which files are processed.
+* `race_LOAD.R` loads the processed csvs and does some further cleaning and processing.
+
+I've already run the first two steps so, given a folder of the correct csvs, only the last step needs to be run.
+
+The notes on importing are [here](#import) while the more fun part of the analysis is after that [here](#analysis).
+
+
+
+<a id="import"></a>
+
+# Importing Data 
 
 This is the big challenge here. There are ways to do it manually but I want to use it as a chance to learn new skills. I currently have the results I want to analyse but many are in pdfs. I see the following broad methods for doing this:
 
@@ -50,8 +68,12 @@ The code for this is in `race_to_csv_DO.R` using functions in `race_FUNC.R`.
 
 The challenge in creating the CSVs was in text processing after it was read from the PDF files. The main problem was that the tables in the PDFs were in different forms with some entries missing. It was easy to see what these missing entries should be (MSEN for age category or UA for club) but it was not easy to fix like it would be in a table. It made processing difficult because my processing method relied on splitting each line into "words". I managed it but it took time. See the files for details.
 
-A better approach might have been to treat the text as a fixed width file. This would require me to state the column widths for each file (in some cases the widths differe on different pages too). It could be robust once I have done that though.
+A better approach might have been to treat the text as a fixed width file. This would require me to state the column widths for each file (in some cases the widths difer on different pages too). It could be robust once I have done that though.
 
 ## Web Scraping in R
 
 The main package to do this appears to be [rvest](https://cran.r-project.org/web/packages/rvest/index.html) which is a Hadley package. Example tutorials are [here](https://rpubs.com/Radcliffe/superbowl), [here](https://blog.rstudio.org/2014/11/24/rvest-easy-web-scraping-with-r/) and a [longer one](https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/)
+
+<a id="analysis"></a>
+
+# Analysing the Results 

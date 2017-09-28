@@ -18,11 +18,10 @@ if(dir.exists("C:/Users/edwards/Dropbox/Mine/Personal/Running/Races&events/")){
 files_raw <- list.files(str_c(path_root, "Results_raw"))
 files_raw
 
-file_name <- str_c(path_root, "Results_raw/HuttonRoof2015.txt")
-
 #############
 # HuttonRoof2015.txt
 #############
+file_name <- str_c(path_root, "Results_raw/HuttonRoof2015.txt")
 #Load
 txt <- readLines(file_name)
 txt

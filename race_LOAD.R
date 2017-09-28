@@ -44,7 +44,7 @@ data <- data %>% rowwise %>% mutate(seconds=as.integer(string_to_time(time))) %>
 # data %>% filter(str_detect(name, "[A-Z][A-Z]")) %>% group_by(raceID) %>% tally
 
 ############
-# Club and category processing exploration).
+# Club and category processing exploration.
 ############
 if(F){
   data %>% group_by(club) %>% tally %>% arrange(desc(n)) %>% print(n=20) #691 unique
