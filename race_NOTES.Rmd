@@ -10,12 +10,11 @@ A summary of the full import process is:
 
 * `race_CLEAN.R` processes 3 race results, 1 text file and 2 csvs so that they are in an appropriate format.
 * `race_to_csv_ALL.R` processes .pdf and .txt file results and saves them in the correct .csv format. This calls `race+to_csv_DO.R` and requires settings in `to_csv_settings.csv` which controls which files are processed.
-* `race_LOAD.R` loads the processed csvs and does some further cleaning and processing.
+* `race_LOAD.R` loads the processed csvs and does some further cleaning and processing. Is called from `race_ANALYSE.R`.
 
-I've already run the first two steps so, given a folder of the correct csvs, only the last step needs to be run.
+I've already run the first two steps so, given a folder of the correct csvs, only the last step needs to be run. I have also saved the output of the `race_LOAD.R` as `race_data_processed.RDATA` so this can be loaded directly in from `race_ANALYSE.R`. 
 
 The notes on importing are [here](#import) while the more fun part of the analysis is after that [here](#analysis).
-
 
 
 <a id="import"></a>
@@ -76,4 +75,9 @@ The main package to do this appears to be [rvest](https://cran.r-project.org/web
 
 <a id="analysis"></a>
 
-# Analysing the Results 
+# Analysing the Results
+
+The code for doing this is `race_ANALYSE.R`. It's rough and experimental at the moment but I do have some useful functions defined in `race_FUNC.R`:
+
+* `compare_runners(data, run1, run2)` - enter the name of two runners as strings and this will output the races in which they've both run and make some comparisons.
+* `rivals(data, runner, range)` - the input `range` is a numeric vector of length two. The function returns all runners races whose time multiple of `runner` was within this range. Not sure this does what I need it too.

@@ -79,3 +79,7 @@ data <- data %>% mutate(year = str_sub(raceID, -4, -1)) %>%
   mutate (gender = ifelse(str_detect(gender, "M|L"), gender, "Unknown")) %>%
   ungroup %>% arrange(year, raceID, place)
 
+# Save df as RDATA file
+if(F){
+  saveRDS(data, "race_data_processed.RDATA")
+}

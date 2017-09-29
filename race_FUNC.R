@@ -1,3 +1,6 @@
+###########################################
+# FUNCTIONS FOR DATA READING AND PROCESSING 
+###########################################
 
 ################
 # Takes a string race entry, processes it and outputs a character vector matching the FRA
@@ -169,6 +172,10 @@ standardise_category <- function(categ){
   return(categ)
 }
 
+####################
+# ANALYSIS FUNCTIONS
+####################
+
 #############
 #Inputs: names of two runners.
 #Returns a data frame with one row for each race both runners did and a comparison of times.
@@ -189,7 +196,7 @@ compare_runners <- function(data, run1, run2) {
 # Returns a dataframe of results where the time multiple compared to the time of the "runner"
 # was within the supplied range.
 ############
-rivals <- function(data, runner, range) {
+rivals <- function(data, runner, range=c(-Inf, Inf)) {
   low <- range[1]
   high <- range[2]
   by_race <- data %>% group_by(raceID) %>% nest()

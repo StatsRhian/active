@@ -1,5 +1,18 @@
+############
+# For analysing the race results data.
+# Either load from the csvs or from rdata file.
+############
 
-source("race_LOAD.R")
+if(T){
+  library(tidyverse)
+  library(lubridate)
+  library(stringr)
+  source("race_FUNC.R")
+  data <- readRDS("race_data_processed.RDATA")
+}else{
+  source("race_LOAD.R")
+}
+
 
 ret %>% group_by(time) %>% tally
 ret %>% group_by(name) %>% count
@@ -70,7 +83,8 @@ ggplot(data=compare) +
 # Analyse rivals
 runner <- "James Edwards"
 range <- c(0.95, 1)
-rivals_full <- rivals(data, runner, c(-Inf, Inf))
+range <- c(-Inf, Inf)
+rivals_full <- rivals(data, runner, range)
 rivals_full %>% group_by(name) %>% tally %>% arrange(desc(n)) %>% print(n=30)
 rivals_full %>% group_by(name) %>% summarise(avg=mean(multiple), n=n()) %>%
   filter(n>1) %>% arrange(desc(n))
