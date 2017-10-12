@@ -23,3 +23,4 @@ The processing:
     + log_B_split, log_F_split - B and F data with week data split up over following week.
     + log_new - R combined with B and F splits. 9 variables so some running specific ones lost.
     + totals - Daily totals for each of R,B,F (Time, Distance, Ascent). Entries for every day.
+    

@@ -195,6 +195,8 @@ compare_runners <- function(data, run1, run2) {
 # Input a runner's name and a range (vector of length two).
 # Returns a dataframe of results where the time multiple compared to the time of the "runner"
 # was within the supplied range.
+# Output df adds two variables: my_time - time of "runner", and multiple - time / my_time.
+# So multiple < 1 indicates "runner" was slower. 
 ############
 rivals <- function(data, runner, range=c(-Inf, Inf)) {
   low <- range[1]

@@ -84,8 +84,10 @@ ggplot(data=compare) +
 runner <- "James Edwards"
 range <- c(0.95, 1)
 range <- c(-Inf, Inf)
-rivals_full <- rivals(data, runner, range)
-rivals_full %>% group_by(name) %>% tally %>% arrange(desc(n)) %>% print(n=30)
-rivals_full %>% group_by(name) %>% summarise(avg=mean(multiple), n=n()) %>%
+raced_with <- rivals(data, runner, range)
+raced_with %>% group_by(name) %>% tally %>% arrange(desc(n)) %>% print(n=30)
+raced_with %>% group_by(name) %>% summarise(avg=mean(multiple), n=n()) %>%
   filter(n>1) %>% arrange(desc(n))
+
+rivals_full <- raced_with %>% group_by(name) %>% nest
 

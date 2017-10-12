@@ -18,8 +18,6 @@ Each change can be labelled as added, changed or fixed.
 
 ## To do
 
-* Split up `active R project` into race, activity analysis & OCT.
-* Make code available to Rhian (totally public)?
 * Standardise category variables.
 * Some categories are unknown or mislabled.
 * Separate README for race project.
@@ -28,6 +26,7 @@ Each change can be labelled as added, changed or fixed.
 * Unit tests?
 * McAbbb case wrong
 * Add race info data (date, class,...?)
+* Rivals code
 
 ## Issues
 
