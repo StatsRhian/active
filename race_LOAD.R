@@ -74,6 +74,7 @@ data <- data %>% group_by(raceID) %>% mutate(perc_winner=seconds / min(seconds))
 #Add % of cat winner's time
 data <- data %>% group_by(raceID, category) %>% mutate(perc_cat_winner=seconds / min(seconds))
 #Add year of race and gender and sort
+# Gender is "M", "L", or "Unknown"
 data <- data %>% mutate(year = str_sub(raceID, -4, -1)) %>%
   mutate(gender = str_sub(category, 1, 1)) %>% 
   mutate (gender = ifelse(str_detect(gender, "M|L"), gender, "Unknown")) %>%

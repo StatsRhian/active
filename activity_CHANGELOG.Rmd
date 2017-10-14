@@ -41,7 +41,12 @@ I was slow making a changelog. As of 24/09/17 contains files for:
 * `activity_NOTES.Rmd` - notes on the code and data exploration.
 * `activity_CHANGELOG.Rmd` - this file.
 
+Features:
+
+* Code and functions for listing "rivals". See end of `race_ANALYSE.R`.
+
 ### Changed
+
 
 
 

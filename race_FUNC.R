@@ -218,3 +218,33 @@ runner_time <- function(data, runner){
   if (!ran){return(NA)}
   return(filter(data, name==runner)["seconds"])
 }
+
+###########
+# Helper function for rivals list. Given an input of a vector of categories returns a single category which 
+# is the "oldest".
+###########
+oldest_cat <- function(cat_vec){
+  cat_order <- c('Amanda', 'Cocks', 'Scott', 'Kampen', 'None','Girl', 'V', 'LU18', 'LU20', 'LU21', 'LU23', 'LU25', 'Lady', 'LV40', 'LV45', 'LV50', 'LV55', 'LV60', 'LV65', 'LV70', 
+                 'MU18', 'MU20', 'MU21', 'MU23', 'MU25', 'Man', 'MV40', 'MV41', 'MV45', 'MV50', 'MV55', 'MV60', 'MV65', 'MV70', 'MV75')
+  matches <- which(cat_order %in% cat_vec)
+  return(cat_order[max(matches)])
+}
+
+#############
+# Helper function for rivals list. Given an input of a vector of genders returns a single gender which 
+# is "M" or "F" if contained in the vector or "Unknown" otherwise.
+#############
+check_gender <- function(gender_vec){
+  if(any(gender_vec == "L")){return("L")}
+  if(any(gender_vec == "M")){return("M")}
+  return("Unknown")
+}
+
+#############
+# Helper function for rivals list. Input is a vector of categories. Returns "Y" for veteran categories i.e. >=35 
+# age, "N" otherwise.
+#############
+check_vet <- function(cat_vec){
+  vet <- ifelse(str_extract(cat_vec, "\\d\\d") >= 35, "Y", "N")
+  return(ifelse(is.na(vet), "N", vet))
+}

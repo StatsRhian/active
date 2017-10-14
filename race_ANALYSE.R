@@ -7,6 +7,7 @@ if(T){
   library(tidyverse)
   library(lubridate)
   library(stringr)
+  library(purrr)
   source("race_FUNC.R")
   data <- readRDS("race_data_processed.RDATA")
 }else{
@@ -82,12 +83,43 @@ ggplot(data=compare) +
 ########
 # Analyse rivals
 runner <- "James Edwards"
-range <- c(0.95, 1)
+#range <- c(0.95, 1)
 range <- c(-Inf, Inf)
-raced_with <- raced_with(data, runner, range)
-raced_with %>% group_by(name) %>% tally %>% arrange(desc(n)) %>% print(n=30)
-raced_with %>% group_by(name) %>% summarise(avg=mean(multiple), n=n()) %>%
-  filter(n>1) %>% arrange(desc(n))
 
-rivals_full <- raced_with %>% group_by(name) %>% nest
+# Creates df of people/race combinations who have raced with "runner".
+raced_with <- raced_with(data, runner, range)
+
+# Creates df summary of all runners who have raced with "runner"
+rivals_full <- raced_with %>% group_by(name) %>% 
+  summarise(races=n(), races_faster=sum(multiple < 1), 
+            prop_faster=mean(multiple < 1), avg_multiple=mean(multiple), 
+            oldest_cat=oldest_cat(category), gender=check_gender(gender)) %>%
+  mutate(vet=check_vet(oldest_cat)) %>%
+  arrange(desc(races)) 
+rivals_full
+
+# Various filters rivals full
+rivals <- rivals_full %>% 
+  filter(avg_multiple < 1.08)  %>%
+  filter(races > 2) %>%
+  arrange(desc(avg_multiple))
+
+rivals_full %>%
+  filter(avg_multiple < 1.10)  %>%
+  filter(races > 1) %>%
+  filter(gender=="L") %>%
+  arrange(avg_multiple)
+
+rivals_full %>% 
+  filter(avg_multiple < 1.05)  %>%
+  filter(avg_multiple > 0.9)  %>%
+  filter(races > 2) %>%
+  arrange(avg_multiple)
+
+(rivals_vets <- rivals_full %>% 
+  filter(avg_multiple < 1.05)  %>%
+  filter(vet=="Y")  %>%
+  filter(races > 2) %>%
+  #filter(prop_faster == 1) %>%
+  arrange(avg_multiple)) 
 
