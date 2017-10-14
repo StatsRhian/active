@@ -198,7 +198,7 @@ compare_runners <- function(data, run1, run2) {
 # Output df adds two variables: my_time - time of "runner", and multiple - time / my_time.
 # So multiple < 1 indicates "runner" was slower. 
 ############
-rivals <- function(data, runner, range=c(-Inf, Inf)) {
+raced_with <- function(data, runner, range=c(-Inf, Inf)) {
   low <- range[1]
   high <- range[2]
   by_race <- data %>% group_by(raceID) %>% nest()
@@ -210,7 +210,7 @@ rivals <- function(data, runner, range=c(-Inf, Inf)) {
 }
 
 #################
-# A helper function for rivals(). Returns a vector of times (seconds) for the runner
+# A helper function for raced_with(). Returns a vector of times (seconds) for the runner
 # named in the argument.
 #################
 runner_time <- function(data, runner){
