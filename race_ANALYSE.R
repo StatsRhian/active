@@ -14,36 +14,34 @@ if(T){
   source("race_LOAD.R")
 }
 
+if (F){
+  count(data, raceID) %>% print(n=Inf)
+  count(data, name) %>% arrange(desc(n)) %>% print(n=20)
+  data %>% filter(str_detect(club, "Lonsdale")) %>% count(name) %>% arrange(desc(n))
+}
 
-ret %>% group_by(time) %>% tally
-ret %>% group_by(name) %>% count
+# Exploration for cleaning ---------------
+if (F){
+  data %>% filter(!str_detect(name, "[[:lower:]]")) %>% group_by(raceID) %>% tally
+  data %>% filter(!str_detect(name, "[a-z]")) %>% group_by(raceID) %>% tally
+  data %>% filter(!str_detect(name, "[a-z]")) %>% 
+    filter(!str_detect(raceID, "Arnside")) %>% group_by(raceID) %>% tally
+  
+  # Club NAs and no category
+  data %>% filter(is.na(club)) %>% group_by(raceID) %>% tally
+  data %>% filter(category=="None") %>% group_by(raceID) %>% tally
+  
+  # Category summaries
+  data %>%  group_by(category) %>% tally %>% top_n(20, n)
+  data %>%  group_by(category) %>% tally %>% View
+  
+  # Detect triple names
+  data %>% filter(str_detect(name, " [A-z] | [A-z]$| [A-z][A-z]$| [A-z][A-z] "))
+}
 
-data %>% group_by(raceID) %>% tally %>% print(n=Inf)
-
-data %>% group_by(name) %>% tally %>% arrange(desc(n)) %>% print(n=20)
 
 
-
-data %>% filter(str_detect(club, "Lonsdale")) %>% group_by(name) %>% tally %>% arrange(desc(n))
-data %>% filter(!str_detect(name, "[[:lower:]]")) %>% group_by(raceID) %>% tally
-data %>% filter(!str_detect(name, "[a-z]")) %>% group_by(raceID) %>% tally
-
-data %>% filter(!str_detect(name, "[a-z]")) %>% 
-  filter(!str_detect(raceID, "Arnside")) %>% group_by(raceID) %>% tally
-
-
-data %>% filter(is.na(club)) %>% group_by(raceID) %>% tally
-data %>% filter(category=="None") %>% group_by(raceID) %>% tally
-                
-data %>%  group_by(category) %>% tally %>% top_n(20, n)
-data %>%  group_by(category) %>% tally %>% View
-
-#Issues with triple names
-data %>% filter(str_detect(name, " [A-z] | [A-z]$| [A-z][A-z]$| [A-z][A-z] "))
-
-##########
-#Race winners
-
+#Race winners ----------------
 data %>% group_by(raceID) %>% summarise(fastest=min(time)) %>% print(n=Inf)
 #These would work with character time I think
 winners <- data %>% group_by(raceID) %>% top_n(1, desc(seconds))
@@ -52,16 +50,16 @@ cat_winners <- data %>% group_by(raceID, category) %>% top_n(1, desc(seconds))
 winners <- filter(data, place==1)
 cat_winners <- filter(data, cat_place==1)
 
-#########
-#Single runner info
+
+#Single runner info --------------------
 runner = "James Edwards"
 Jed <- data %>% filter(name==runner) %>% select(-club) %>% print(n=Inf)
 plot(Jed$perc_winner)
 Jed <- data %>% filter(name==runner) 
 Rhi <- data %>% filter(name=="Rhian Davies") 
 
-########
-# Compare a pair of runners
+
+# Compare a pair of runners --------------------
 run2 <- "James Edwards"
 run1 <- "Tim Cowin"
 run1 <- "Heidi Dent"
@@ -80,10 +78,9 @@ ggplot(data=compare) +
   geom_bar(aes(x=factor(raceID, levels=raceID), y=multiple), stat="identity") +
   coord_flip(ylim=c(min(compare$multiple), max(compare$multiple)))
 
-########
-# Analyse rivals
+
+# Analyse rivals --------------------
 runner <- "James Edwards"
-#range <- c(0.95, 1)
 range <- c(-Inf, Inf)
 
 # Creates df of people/race combinations who have raced with "runner".
