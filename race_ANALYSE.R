@@ -60,6 +60,7 @@ Rhi <- data %>% filter(name=="Rhian Davies")
 
 
 # Compare a pair of runners --------------------
+# It'd be useful to have this work with vectors of names. Output will be a list.
 run2 <- "James Edwards"
 run1 <- "Tim Cowin"
 run1 <- "Heidi Dent"
@@ -73,6 +74,9 @@ run1 <- "Richard Mellon"
 run1 <- "Phil Davies"
 run1 <- "Josh Jardine"
 run1 <- "Harvey Lord"
+run2 <- "Sharon Taylor"
+run1 <- "Jo Matthew"
+run1 <- "May Crawford"
 (compare <- compare_runners(data, run1, run2) %>% select(-c(seconds1, seconds2)))
 ggplot(data=compare) +
   geom_bar(aes(x=factor(raceID, levels=raceID), y=multiple), stat="identity") +
@@ -81,13 +85,13 @@ ggplot(data=compare) +
 
 # Analyse rivals --------------------
 runner <- "James Edwards"
-range <- c(-Inf, Inf)
+runner <- "Rhian Davies"
 
 # Creates df of people/race combinations who have raced with "runner".
-raced_with <- raced_with(data, runner, range)
+all_raced_with <- raced_with(data, runner)
 
 # Creates df summary of all runners who have raced with "runner"
-rivals_full <- raced_with %>% group_by(name) %>% 
+rivals_full <- all_raced_with %>% group_by(name) %>% 
   summarise(races=n(), races_faster=sum(multiple < 1), 
             prop_faster=mean(multiple < 1), avg_multiple=mean(multiple), 
             oldest_cat=oldest_cat(category), gender=check_gender(gender)) %>%
@@ -95,28 +99,10 @@ rivals_full <- raced_with %>% group_by(name) %>%
   arrange(desc(races)) 
 rivals_full
 
-# Various filters rivals full
-rivals <- rivals_full %>% 
-  filter(avg_multiple < 1.08)  %>%
-  filter(races > 2) %>%
-  arrange(desc(avg_multiple))
-
-rivals_full %>%
-  filter(avg_multiple < 1.10)  %>%
-  filter(races > 1) %>%
-  filter(gender=="L") %>%
-  arrange(avg_multiple)
-
-rivals_full %>% 
-  filter(avg_multiple < 1.05)  %>%
-  filter(avg_multiple > 0.9)  %>%
-  filter(races > 2) %>%
-  arrange(avg_multiple)
-
-(rivals_vets <- rivals_full %>% 
-  filter(avg_multiple < 1.05)  %>%
-  filter(vet=="Y")  %>%
-  filter(races > 2) %>%
-  #filter(prop_faster == 1) %>%
-  arrange(avg_multiple)) 
+# Various filters of rivals full
+filter_rivals(rivals_full, max_multiple=1.08, min_races=2, desc=T)
+filter_rivals(rivals_full, max_multiple=1.1, min_races=2, gender_filter="L")
+filter_rivals(rivals_full, min_multiple=0.9, max_multiple=1.05, min_races=2)
+(rivals_vets <- filter_rivals(rivals_full, max_multiple=1.1, min_races=2, vet_filter="Y"))
+filter_rivals(rivals_full, min_prop_faster = 1, min_races=3) #never beaten
 

@@ -248,3 +248,24 @@ check_vet <- function(cat_vec){
   vet <- ifelse(str_extract(cat_vec, "\\d\\d") >= 35, "Y", "N")
   return(ifelse(is.na(vet), "N", vet))
 }
+
+###############
+# Filters the rivals_full df according to the arguments.
+# gender_filter takes either NA for all (default) or "M" or "L".
+# vet_filter is either NA (for all), "Y" or "N".
+# arrange_by and desc control sorting.
+###############
+filter_rivals <- function(rivals_full, min_multiple=-Inf, max_multiple=Inf, min_races=2, gender_filter=NA, vet_filter=NA, 
+                          arrange_by="avg_multiple", desc=F, min_prop_faster=0){
+  rivals <- rivals_full %>% 
+    filter(avg_multiple <= max_multiple)  %>% 
+    filter(avg_multiple >= min_multiple)  %>%
+    filter(races >= min_races) %>%
+    filter(prop_faster >= min_prop_faster)
+  if(!is.na(gender_filter)){rivals <- filter(rivals, gender==gender_filter)}
+  if(!is.na(vet_filter)){rivals <- filter(rivals, vet==vet_filter)}
+  if (desc){arrange_by=paste0("desc(", arrange_by, ")")}
+  rivals <- arrange_(rivals, arrange_by)
+  
+  return(rivals)
+}

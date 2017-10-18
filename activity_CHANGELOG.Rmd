@@ -25,6 +25,7 @@ Each change can be labelled as added, changed or fixed.
     + ...?
 * Rolling sum - I think create a new df for each day I want in the rolling sum with all the cols I need i.e. date & time/dist/ascent for each of BFR & foot combined & time combined. ...or date, type, time, dist, ascent cols with type R,B,F,RF,RFB then filter when needed. Maybe make own function - use cumsum then lag? Use dplyr?
 * Eddington number type functions.
+* compare_runners() with vectors of names. Output will be a list.
 
 ## Issues
 
@@ -44,6 +45,7 @@ I was slow making a changelog. As of 24/09/17 contains files for:
 Features:
 
 * Code and functions for listing "rivals". See end of `race_ANALYSE.R`.
+* Function `filter_rivals()`.
 
 ### Changed
 
