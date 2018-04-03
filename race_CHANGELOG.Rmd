@@ -27,6 +27,7 @@ Each change can be labelled as added, changed or fixed.
 * McAbbb case wrong
 * Add race info data (date, class,...?)
 * Rivals code
+* Method to handle errors in data. Auxillary spreadsheets, aliases.
 
 ## Issues
 

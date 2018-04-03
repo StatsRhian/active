@@ -73,10 +73,15 @@ run1 <- "Jon Rylance"
 run1 <- "Richard Mellon"
 run1 <- "Phil Davies"
 run1 <- "Josh Jardine"
-run1 <- "Harvey Lord"
+run2 <- "Harvey Lord"
 run2 <- "Sharon Taylor"
 run1 <- "Jo Matthew"
 run1 <- "May Crawford"
+run2 <- "Paul Reilly"
+run2 <- "John Millen"
+run2 <- "Jamie Barron"
+run2 <- "Darren Fishwick"
+run2 <- "Garry Greenhow"
 (compare <- compare_runners(data, run1, run2) %>% select(-c(seconds1, seconds2)))
 ggplot(data=compare) +
   geom_bar(aes(x=factor(raceID, levels=raceID), y=multiple), stat="identity") +
