@@ -18,13 +18,13 @@ Each change can be labelled as added, changed or fixed.
 
 ## To do
 
+* 2018 imports. Combine with previous.
 * Replicate excel sheets with functions:
     + Shoes
     + Longest rides/runs - function similar to above but with options
     + Number rides/runs over given length etc.
     + ...?
 * Rolling sum - I think create a new df for each day I want in the rolling sum with all the cols I need i.e. date & time/dist/ascent for each of BFR & foot combined & time combined. ...or date, type, time, dist, ascent cols with type R,B,F,RF,RFB then filter when needed. Maybe make own function - use cumsum then lag? Use dplyr?
-* Eddington number type functions.
 * compare_runners() with vectors of names. Output will be a list.
 
 ## Issues

@@ -49,3 +49,30 @@ move_ave <- function(x,n=7){
   return(as.numeric(stats::filter(x, rep(1/n,n), sides=1)))
 }
 
+##################
+# Find an Eddington type number. An Eddington number is the number n of rides >=n activities with >=n miles.
+# This function is more flexible allowing diffent activity types (argument type is R, B or F) and other
+# measures and units. Give variable for the measure in the "measure" argument and "unit_adjust" to divide
+# the measure by.
+# By default all dates are included but a integer of vector "years" can be used to filter.
+# The number of activities above each integer is returned together with the Eddington number.
+##################
+eddington <- function(data, type, measure = "Distance", unit_adjust = 1, years = NA) {
+  if (!any(is.na(years))){
+    data <- filter(data, year(Date) %in% years)
+  }
+  vals <- data %>% filter(Type == type) %>% 
+    select_at(measure) %>% 
+    mutate_all(funs(./unit_adjust)) %>% 
+    unlist(, use.names = F) 
+  
+  nn <- floor(max(vals))
+  n_exceeds <- integer(nn) 
+  for (i in 1 : nn){
+    n_exceeds[i] <- sum((vals) >= i)
+  }
+  edd <- max(which(n_exceeds >= (1 : nn)))
+  list(eddington = edd, exceeds = n_exceeds)
+}
+
+
