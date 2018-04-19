@@ -73,7 +73,7 @@ run1 <- "Jon Rylance"
 run1 <- "Richard Mellon"
 run1 <- "Phil Davies"
 run1 <- "Josh Jardine"
-run2 <- "Harvey Lord"
+run1 <- "Harvey Lord"
 run2 <- "Sharon Taylor"
 run1 <- "Jo Matthew"
 run1 <- "May Crawford"
@@ -82,6 +82,10 @@ run2 <- "John Millen"
 run2 <- "Jamie Barron"
 run2 <- "Darren Fishwick"
 run2 <- "Garry Greenhow"
+run1 <- "Phil Winskill"
+run1 <- "Doug Love"
+run1 <- "Sam Harrison"
+run1 <- "Mike Barron"
 (compare <- compare_runners(data, run1, run2) %>% select(-c(seconds1, seconds2)))
 ggplot(data=compare) +
   geom_bar(aes(x=factor(raceID, levels=raceID), y=multiple), stat="identity") +
@@ -111,3 +115,5 @@ filter_rivals(rivals_full, min_multiple=0.9, max_multiple=1.05, min_races=2)
 (rivals_vets <- filter_rivals(rivals_full, max_multiple=1.1, min_races=2, vet_filter="Y"))
 filter_rivals(rivals_full, min_prop_faster = 1, min_races=3) #never beaten
 
+# Filter by race -----------------
+data %>% filter(raceID == "Loughrigg2018") %>% print(n = 35)

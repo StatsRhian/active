@@ -51,8 +51,10 @@ eddington(totals, "R", years = 2017)
 eddington(log_new, "B", "Ascent", 20)
 
 library(zoo)
+library(tidyverse)
 temp <- totals %>% filter(Type=="R") %>% transmute(temp=rollsum(Distance, 28, alig="right", fill=NA))
 plot(temp$temp, typ='l')
+plot(tail(temp$temp, 730), typ='l')
 
 
 
